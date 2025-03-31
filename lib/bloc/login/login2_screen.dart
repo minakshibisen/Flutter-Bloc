@@ -1,4 +1,5 @@
 import 'package:bloc_flutter/common/primary_button.dart';
+import 'package:bloc_flutter/ui/signup_screen.dart';
 import 'package:bloc_flutter/ui/switch_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,7 +60,6 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
               ),
             ),
           ),
-
           Center(
             child: ScaleTransition(
               scale: _animation,
@@ -70,22 +70,32 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                     if (state.isSuccess) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => SwitchScreen()),
+                        MaterialPageRoute(builder: (context) => SwitchScreen()),
                       );
                     }
                   },
                   child: Column(
                     children: [
-                      Container(height: 70,),
-                      SizedBox(width:150,height:150,child: Image.asset('assets/images/login.png')),
-
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.11,),
+                      Container(
+                        height: 70,
+                      ),
+                      SizedBox(
+                          width: 150,
+                          height: 150,
+                          child: Image.asset('assets/images/login.png')),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.11,
+                      ),
                       Text(
                         "Login",
-                        style: TextStyle(color: Colors.blue,fontSize: 35,fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.03,
+                      ),
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
                           return NeumorphicTextField(
@@ -98,8 +108,9 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                           );
                         },
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
-
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.02,
+                      ),
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
                           return NeumorphicTextField(
@@ -113,7 +124,9 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                           );
                         },
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                      ),
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
                           return PrimaryButton(
@@ -121,18 +134,33 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                             isLoading: state.isSubmitting,
                             onPressed: () {
                               context.read<LoginBloc>().add(LoginSubmitted());
-                            }, context: context,
+                            },
+                            context: context,
                           );
                         },
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.02,
+                      ),
                       Text("Forgot your password?",
                           style: Theme.of(context).textTheme.bodyLarge),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                      ),
                       _buildSocialButtons(),
                       SizedBox(height: 20),
-                      Text("Don't have an account? Sign up",
-                         style: Theme.of(context).textTheme.bodyLarge),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignupScreen()),
+                          );
+                        },
+                        child: Text(
+                          "Don't have an account? Sign up",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -163,7 +191,8 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
         onPressed: () {},
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         icon: Icon(icon, color: Colors.white),
         label: Text(label, style: TextStyle(color: Colors.white)),
@@ -171,13 +200,16 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
     );
   }
 }
+
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
     path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(size.width / 4, size.height, size.width / 2, size.height - 40);
-    path.quadraticBezierTo(3 / 4 * size.width, size.height - 80, size.width, size.height - 40);
+    path.quadraticBezierTo(
+        size.width / 4, size.height, size.width / 2, size.height - 40);
+    path.quadraticBezierTo(
+        3 / 4 * size.width, size.height - 80, size.width, size.height - 40);
     path.lineTo(size.width, 0);
     path.close();
     return path;
