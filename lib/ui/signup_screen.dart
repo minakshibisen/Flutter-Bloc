@@ -95,10 +95,10 @@ class _SignupScreenState extends State<SignupScreen>
                       child: GestureDetector(
                         onTap: _pickImage,
                         child: CircleAvatar(
-                          radius: 50,
+                          radius: 90,
                           backgroundImage: _imagePath != null
                               ? FileImage(File(_imagePath!))
-                              : NetworkImage('https://example.com/login.png') as ImageProvider,
+                              : NetworkImage('https://previews.123rf.com/images/moremar/moremar1709/moremar170900019/86803734-female-portrait-avatar-woman-in-a-circle-on-a-white-background-linear-art-vector-illustration.jpg') as ImageProvider,
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: CircleAvatar(
