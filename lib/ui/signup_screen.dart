@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../common/input_field.dart';
 import '../../common/primary_button.dart';
 import '../bloc/signUp/sign_up_bloc.dart';
@@ -20,6 +22,8 @@ class _SignupScreenState extends State<SignupScreen>
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  String? _imagePath;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +39,17 @@ class _SignupScreenState extends State<SignupScreen>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imagePath = pickedFile.path;
+      });
+    }
   }
 
   @override
@@ -58,7 +73,7 @@ class _SignupScreenState extends State<SignupScreen>
             FadeTransition(
               opacity: _fadeAnimation,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 60),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 60),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,7 +90,27 @@ class _SignupScreenState extends State<SignupScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 30),
+                    Center(
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: _imagePath != null
+                              ? FileImage(File(_imagePath!))
+                              : NetworkImage('https://example.com/login.png') as ImageProvider,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 18,
+                              child: Icon(Icons.camera_alt, color: Colors.black, size: 20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     BlocListener<SignupBloc, SignupState>(
                       listener: (context, state) {
                         if (state.isSuccess) {
@@ -89,8 +124,7 @@ class _SignupScreenState extends State<SignupScreen>
                         } else if (state.isFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content:
-                              Text("Signup Failed: Passwords do not match"),
+                              content: Text("Signup Failed: Passwords do not match"),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -98,18 +132,32 @@ class _SignupScreenState extends State<SignupScreen>
                       },
                       child: Column(
                         children: [
-                          _buildTextField(nameController, "Name", Icons.person, (name) =>
-                              context.read<SignupBloc>().add(NameChanged(name))),
-                          _buildTextField(emailController, "Email", Icons.email, (email) =>
-                              context.read<SignupBloc>().add(EmailChanged(email))),
-                          _buildTextField(passwordController, "Password", Icons.lock, (password) =>
-                              context.read<SignupBloc>().add(PasswordChanged(password)),
-                              obscureText: true),
-                          _buildTextField(confirmPasswordController, "Confirm Password", Icons.lock,
-                                  (confirmPassword) => context
-                                  .read<SignupBloc>()
-                                  .add(ConfirmPasswordChanged(confirmPassword)),
-                              obscureText: true),
+                          _buildTextField(
+                            nameController,
+                            "Name",
+                            Icons.person,
+                                (name) => context.read<SignupBloc>().add(NameChanged(name)),
+                          ),
+                          _buildTextField(
+                            emailController,
+                            "Email",
+                            Icons.email,
+                                (email) => context.read<SignupBloc>().add(EmailChanged(email)),
+                          ),
+                          _buildTextField(
+                            passwordController,
+                            "Password",
+                            Icons.lock,
+                                (password) => context.read<SignupBloc>().add(PasswordChanged(password)),
+                            obscureText: true,
+                          ),
+                          _buildTextField(
+                            confirmPasswordController,
+                            "Confirm Password",
+                            Icons.lock,
+                                (confirmPassword) => context.read<SignupBloc>().add(ConfirmPasswordChanged(confirmPassword)),
+                            obscureText: true,
+                          ),
                           SizedBox(height: 20),
                           BlocBuilder<SignupBloc, SignupState>(
                             builder: (context, state) {
@@ -141,8 +189,11 @@ class _SignupScreenState extends State<SignupScreen>
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint,
-      IconData icon, Function(String) onChanged,
+  Widget _buildTextField(
+      TextEditingController controller,
+      String hint,
+      IconData icon,
+      Function(String) onChanged,
       {bool obscureText = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
