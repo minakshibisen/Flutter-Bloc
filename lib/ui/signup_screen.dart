@@ -9,11 +9,13 @@ import '../bloc/signUp/sign_up_event.dart';
 import '../bloc/signUp/sign_up_state.dart';
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  SignupScreenState createState() => SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen>
+class SignupScreenState extends State<SignupScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;

@@ -1,3 +1,4 @@
+import 'package:bloc_flutter/bloc/list/list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
 import 'package:bloc_flutter/bloc/switch/switch_bloc.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => LoginBloc(),
       child: BlocProvider(
-  create: (context) => SwitchBloc(),
+  create: (context) => ListBloc(),
   child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
