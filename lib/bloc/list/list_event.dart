@@ -17,7 +17,7 @@ class AddListEvent extends ListEvent {
 }
 
 class RemoveListEvent extends ListEvent {
-  final String task;
+  final Object task;
 
   const RemoveListEvent({required this.task});
 
