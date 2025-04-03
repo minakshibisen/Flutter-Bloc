@@ -1,6 +1,5 @@
 import 'package:bloc_flutter/common/primary_button.dart';
 import 'package:bloc_flutter/ui/home_screen.dart';
-import 'package:bloc_flutter/ui/signup_screen.dart';
 import 'package:bloc_flutter/ui/switch_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -15,7 +15,6 @@ class HomeScreen extends StatelessWidget {
       create: (context) => ListBloc(),
       child: HomeScreenContent(),
     );
-
   }
 }
 
@@ -117,6 +116,4 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
       },
     );
   }
-
-
 }

@@ -1,6 +1,5 @@
 import 'package:bloc_flutter/bloc/list/list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
-import 'package:bloc_flutter/bloc/switch/switch_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,6 +8,7 @@ import 'bloc/login/login2_screen.dart';
 void main() {
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -17,16 +17,16 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => LoginBloc(),
       child: BlocProvider(
-  create: (context) => ListBloc(),
-  child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+        create: (context) => ListBloc(),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: AnimatedLoginScreen(),
         ),
-        home: AnimatedLoginScreen(),
       ),
-),
     );
   }
 }
