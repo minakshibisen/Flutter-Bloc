@@ -1,10 +1,8 @@
 import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
-import 'package:bloc_flutter/bloc/list/list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
 import 'package:bloc_flutter/repository/favorite_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'bloc/login/login2_screen.dart';
 
 void main() {

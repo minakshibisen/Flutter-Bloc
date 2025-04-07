@@ -15,6 +15,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     super.initState();
     context.read<FavoriteListBloc>().add(FetchFavoriteList());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +39,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         return Card(
                             child: ListTile(
                           title: Text(item.value.toString()),
-                                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.favorite)),
+                          trailing: IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.favorite_border)),
                         ));
                       });
               }
