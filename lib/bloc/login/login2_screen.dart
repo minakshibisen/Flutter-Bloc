@@ -1,4 +1,5 @@
 import 'package:bloc_flutter/common/primary_button.dart';
+import 'package:bloc_flutter/ui/favorite_screen.dart';
 import 'package:bloc_flutter/ui/home_screen.dart';
 import 'package:bloc_flutter/ui/switch_screen.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +154,7 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HomeScreen(
+                            MaterialPageRoute(builder: (context) => FavoriteScreen(
                             )),
                           );
                         },

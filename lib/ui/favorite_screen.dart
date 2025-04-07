@@ -11,18 +11,36 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
+  void initState() {
+    super.initState();
+    context.read<FavoriteListBloc>().add(FetchFavoriteList());
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<FavoriteListBloc, FavoriteListState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Center(
-                child: Text('text1'),
-              )
-            ],
-          );
-        },
+      body: Center(
+        child: BlocBuilder<FavoriteListBloc, FavoriteListState>(
+          builder: (context, state) {
+            switch (state.listStatus) {
+              case ListStatus.loading:
+                print('loading');
+                return CircularProgressIndicator();
+              case ListStatus.failure:
+                print('failure');
+                return Text('Something went wrong');
+              case ListStatus.success:
+                return ListView.builder(
+                    itemCount: state.favoriteItemList.length,
+                    itemBuilder: (context, index) {
+                      final item = state.favoriteItemList[index];
+                      return Card(
+                          child: ListTile(
+                        title: Text(item.value.toString()),
+                      ));
+                    });
+            }
+          },
+        ),
       ),
     );
   }

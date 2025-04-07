@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
 
         providers: [
+          BlocProvider(create: (_) => LoginBloc()),
           BlocProvider(create: (_) => FavoriteListBloc(FavoriteRepository()))
         ],
         child: MaterialApp(

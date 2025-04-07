@@ -6,4 +6,5 @@ const FavoriteListEvent();
   @override
   List<Object?> get props => [];
 }
+
 class FetchFavoriteList extends FavoriteListEvent{}
