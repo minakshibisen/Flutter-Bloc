@@ -1,5 +1,7 @@
+import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
 import 'package:bloc_flutter/bloc/list/list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
+import 'package:bloc_flutter/repository/favorite_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,10 +16,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginBloc(),
-      child: BlocProvider(
-        create: (context) => ListBloc(),
+    return MultiBlocProvider(
+
+        providers: [
+          BlocProvider(create: (_) => FavoriteListBloc(FavoriteRepository()))
+        ],
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
           ),
           home: AnimatedLoginScreen(),
         ),
-      ),
+
     );
   }
 }
