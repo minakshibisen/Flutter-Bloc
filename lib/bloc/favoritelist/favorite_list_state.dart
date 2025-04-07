@@ -15,7 +15,6 @@ class FavoriteListState extends Equatable {
       listStatus: listStatus ?? this.listStatus
     );
 }
-
   @override
   List<Object?> get props => [favoriteItemList,listStatus];
 }
