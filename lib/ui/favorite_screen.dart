@@ -39,16 +39,38 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         final item = state.favoriteItemList[index];
                         return Card(
                             child: ListTile(
-                              leading: Checkbox(value: true, onChanged: (value){}),
+                          leading: Checkbox(
+                              value:
+                                  state.temporaryFavoriteItemList.contains(item)
+                                      ? true
+                                      : false,
+                              onChanged: (value) {
+                                if (value!) {
+                                  context
+                                      .read<FavoriteListBloc>()
+                                      .add(SelectedItem(item: item));
+                                } else {
+                                  context
+                                      .read<FavoriteListBloc>()
+                                      .add(UnSelectedItem(item: item));
+                                }
+                              }),
                           title: Text(item.value.toString()),
                           trailing: IconButton(
                               onPressed: () {
-                                FavoriteModelList favoriteModelList =FavoriteModelList(id: item.id, value: item.value,
-                                isFavorite: item.isFavorite? false:true);
-                                context.read<FavoriteListBloc>().add(FavoriteItem(item:favoriteModelList ));
+                                FavoriteModelList favoriteModelList =
+                                    FavoriteModelList(
+                                        id: item.id,
+                                        value: item.value,
+                                        isFavorite:
+                                            item.isFavorite ? false : true);
+                                context
+                                    .read<FavoriteListBloc>()
+                                    .add(FavoriteItem(item: favoriteModelList));
                               },
-                              icon: Icon(
-                                 item.isFavorite?Icons.favorite: Icons.favorite_border)),
+                              icon: Icon(item.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border)),
                         ));
                       });
               }

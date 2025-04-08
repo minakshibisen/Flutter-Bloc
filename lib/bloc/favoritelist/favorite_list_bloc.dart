@@ -42,7 +42,7 @@ class FavoriteListBloc extends Bloc<FavoriteListEvent, FavoriteListState> {
       SelectedItem event, Emitter<FavoriteListState> emit) async {
     temporaryFavoriteList.add(event.item);
     emit(state.copyWith(
-      favoriteItemList: List.from(temporaryFavoriteList),
+      temporaryFavoriteItemList: List.from(temporaryFavoriteList),
 
     ));
   }
@@ -50,7 +50,7 @@ class FavoriteListBloc extends Bloc<FavoriteListEvent, FavoriteListState> {
       UnSelectedItem event, Emitter<FavoriteListState> emit) async {
     temporaryFavoriteList.remove(event.item);
     emit(state.copyWith(
-      favoriteItemList: List.from(temporaryFavoriteList),
+      temporaryFavoriteItemList: List.from(temporaryFavoriteList),
 
     ));
   }
