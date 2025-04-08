@@ -1,4 +1,5 @@
 import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
+import 'package:bloc_flutter/model/favorite_model_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,10 +39,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         final item = state.favoriteItemList[index];
                         return Card(
                             child: ListTile(
+                              leading: Checkbox(value: true, onChanged: (value){}),
                           title: Text(item.value.toString()),
                           trailing: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.favorite_border)),
+                              onPressed: () {
+                                FavoriteModelList favoriteModelList =FavoriteModelList(id: item.id, value: item.value,
+                                isFavorite: item.isFavorite? false:true);
+                                context.read<FavoriteListBloc>().add(FavoriteItem(item:favoriteModelList ));
+                              },
+                              icon: Icon(
+                                 item.isFavorite?Icons.favorite: Icons.favorite_border)),
                         ));
                       });
               }

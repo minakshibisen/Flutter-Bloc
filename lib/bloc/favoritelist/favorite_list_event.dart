@@ -8,3 +8,11 @@ const FavoriteListEvent();
 }
 
 class FetchFavoriteList extends FavoriteListEvent{}
+class FavoriteItem extends FavoriteListEvent{
+  final FavoriteModelList item;
+  const FavoriteItem({ required this.item});
+}
+class CheckBoxItem extends FavoriteListEvent{
+  final FavoriteModelList item;
+  const CheckBoxItem({ required this.item});
+}
