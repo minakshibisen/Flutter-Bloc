@@ -17,6 +17,7 @@ class FavoriteListBloc extends Bloc<FavoriteListEvent, FavoriteListState> {
     on<FavoriteItem>(addFavoriteList);
     on<SelectedItem>(_selectedItem);
     on<UnSelectedItem>(_unSelectedItem);
+    on<DeletedItem>(_deletedItem);
   }
 
   void fetchList(
@@ -43,15 +44,25 @@ class FavoriteListBloc extends Bloc<FavoriteListEvent, FavoriteListState> {
     temporaryFavoriteList.add(event.item);
     emit(state.copyWith(
       temporaryFavoriteItemList: List.from(temporaryFavoriteList),
-
     ));
   }
+
   void _unSelectedItem(
       UnSelectedItem event, Emitter<FavoriteListState> emit) async {
     temporaryFavoriteList.remove(event.item);
     emit(state.copyWith(
       temporaryFavoriteItemList: List.from(temporaryFavoriteList),
+    ));
+  }
 
+  void _deletedItem(DeletedItem event, Emitter<FavoriteListState> emit) async {
+    for (int i = 0; i < temporaryFavoriteList.length; i++) {
+      favoriteList.remove(temporaryFavoriteList[i]);
+    }
+    temporaryFavoriteList.clear();
+    emit(state.copyWith(
+      temporaryFavoriteItemList: List.from(temporaryFavoriteList),
+      favoriteItemList: List.from(temporaryFavoriteList),
     ));
   }
 }

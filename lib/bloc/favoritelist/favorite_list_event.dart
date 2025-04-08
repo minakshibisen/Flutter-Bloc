@@ -24,3 +24,7 @@ class UnSelectedItem extends FavoriteListEvent{
   final FavoriteModelList item;
   const UnSelectedItem({ required this.item});
 }
+class DeletedItem extends FavoriteListEvent{
+  final FavoriteModelList item;
+  const DeletedItem({ required this.item});
+}
