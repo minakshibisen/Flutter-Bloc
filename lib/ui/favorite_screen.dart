@@ -1,5 +1,6 @@
 import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
 import 'package:bloc_flutter/model/favorite_model_list.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,10 +44,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             builder: (context, state) {
               switch (state.listStatus) {
                 case ListStatus.loading:
-                  print('loading');
+                  if (kDebugMode) {
+                    print('loading');
+                  }
                   return CircularProgressIndicator();
                 case ListStatus.failure:
-                  print('failure');
+                  if (kDebugMode) {
+                    print('failure');
+                  }
                   return Text('Something went wrong');
                 case ListStatus.success:
                   return ListView.builder(
