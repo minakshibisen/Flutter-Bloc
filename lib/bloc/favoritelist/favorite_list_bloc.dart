@@ -9,11 +9,14 @@ part 'favorite_list_state.dart';
 
 class FavoriteListBloc extends Bloc<FavoriteListEvent, FavoriteListState> {
   List<FavoriteModelList> favoriteList = [];
+  List<FavoriteModelList> temporaryFavoriteList = [];
   FavoriteRepository favoriteRepository;
 
   FavoriteListBloc(this.favoriteRepository) : super(FavoriteListState()) {
     on<FetchFavoriteList>(fetchList);
     on<FavoriteItem>(addFavoriteList);
+    on<SelectedItem>(_selectedItem);
+    on<UnSelectedItem>(_unSelectedItem);
   }
 
   void fetchList(
@@ -32,6 +35,23 @@ class FavoriteListBloc extends Bloc<FavoriteListEvent, FavoriteListState> {
     favoriteList[index] = event.item;
     emit(state.copyWith(
       favoriteItemList: List.from(favoriteList),
+    ));
+  }
+
+  void _selectedItem(
+      SelectedItem event, Emitter<FavoriteListState> emit) async {
+    temporaryFavoriteList.add(event.item);
+    emit(state.copyWith(
+      favoriteItemList: List.from(temporaryFavoriteList),
+
+    ));
+  }
+  void _unSelectedItem(
+      UnSelectedItem event, Emitter<FavoriteListState> emit) async {
+    temporaryFavoriteList.remove(event.item);
+    emit(state.copyWith(
+      favoriteItemList: List.from(temporaryFavoriteList),
+
     ));
   }
 }

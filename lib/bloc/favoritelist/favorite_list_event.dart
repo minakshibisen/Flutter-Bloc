@@ -16,3 +16,11 @@ class CheckBoxItem extends FavoriteListEvent{
   final FavoriteModelList item;
   const CheckBoxItem({ required this.item});
 }
+class SelectedItem extends FavoriteListEvent{
+  final FavoriteModelList item;
+  const SelectedItem({ required this.item});
+}
+class UnSelectedItem extends FavoriteListEvent{
+  final FavoriteModelList item;
+  const UnSelectedItem({ required this.item});
+}
