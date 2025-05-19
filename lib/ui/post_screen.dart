@@ -3,7 +3,6 @@ import 'package:bloc_flutter/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../utils/enums.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -13,8 +12,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-
-  void initState(){
+  void initState() {
     super.initState();
     context.read<PostBloc>().add(PostFetched());
   }
@@ -25,24 +23,40 @@ class _PostScreenState extends State<PostScreen> {
       appBar: AppBar(
         title: Text('posts APIs'),
       ),
-      body: BlocBuilder<PostBloc,PostState>(builder: (context,state){
-        switch(state.postStatus){
+      body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
+        switch (state.postStatus) {
           case PostStatus.loading:
             return CircularProgressIndicator();
           case PostStatus.failure:
-            return Center(child: Text(state.message.toString(),));
+            return Center(
+                child: Text(
+              state.message.toString(),
+            ));
           case PostStatus.success:
-            return ListView.builder(
-                itemCount: state.postList.length,
-                itemBuilder: (context,index){
-                  final item = state.postList[index];
-              return ListTile(
-                title: Text(item.email.toString(),),
-                subtitle: Text(item.body.toString()),
-              );
-            });
+            return Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                      hintText: 'search with email',
+                      border: OutlineInputBorder()),
+                  onChanged: (filterKey) {},
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: state.postList.length,
+                      itemBuilder: (context, index) {
+                        final item = state.postList[index];
+                        return ListTile(
+                          title: Text(
+                            item.email.toString(),
+                          ),
+                          subtitle: Text(item.body.toString()),
+                        );
+                      }),
+                ),
+              ],
+            );
         }
-
       }),
     );
   }
