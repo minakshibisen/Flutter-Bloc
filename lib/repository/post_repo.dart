@@ -11,7 +11,7 @@ class PostRepository {
           .get(
             Uri.parse('https://jsonplaceholder.typicode.com/comments'),
           )
-          .timeout(const Duration(seconds: 10)); // optional timeout
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final body = json.decode(response.body) as List;

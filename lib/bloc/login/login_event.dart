@@ -26,6 +26,9 @@ class PasswordChanged extends LoginEvent {
 class LoginSubmitted extends LoginEvent{
 
 }
+class LoginApi extends LoginEvent{
+
+}
 class SignUp extends LoginEvent{
 
 }

@@ -8,6 +8,6 @@ class FavoriteRepository {
 
   List<FavoriteModelList> _generateList(int length) {
     return List.generate(length,
-        (index) => FavoriteModelList(id: index.toString(), value: 'item${index}'));
+        (index) => FavoriteModelList(id: index.toString(), value: 'item$index'));
   }
 }

@@ -34,9 +34,7 @@ import 'package:bloc_flutter/repository/post_repo.dart';
 import 'package:bloc_flutter/utils/enums.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-
 part 'post_event.dart';
-
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
