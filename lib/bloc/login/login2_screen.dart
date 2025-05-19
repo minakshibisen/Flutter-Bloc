@@ -1,10 +1,9 @@
-import 'package:bloc_flutter/common/primary_button.dart';
-import 'package:bloc_flutter/ui/favorite_screen.dart';
-import 'package:bloc_flutter/ui/home_screen.dart';
-import 'package:bloc_flutter/ui/switch_screen.dart';
+import 'package:bloc_flutter/ui/counter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/input_field.dart';
+import '../../common/primary_button.dart';
+import '../../ui/favorite_screen.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
 
@@ -19,14 +18,14 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _controller.forward();
   }
@@ -34,11 +33,15 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
   @override
   void dispose() {
     _controller.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -47,11 +50,11 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
             top: 0,
             left: 0,
             right: 0,
-            height: MediaQuery.of(context).size.height * 0.37,
+            height: size.height * 0.37,
             child: ClipPath(
               clipper: WaveClipper(),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFFB993D6), Color(0xFF8CA6DB)],
                     begin: Alignment.topCenter,
@@ -61,110 +64,114 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
               ),
             ),
           ),
-          Center(
-            child: ScaleTransition(
-              scale: _animation,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: BlocListener<LoginBloc, LoginState>(
-                  listener: (context, state) {
-                    if (state.isSuccess) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SwitchScreen()),
-                      );
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 70,
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: BlocListener<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state.isSuccess) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CounterScreen()),
+                    );
+                  }
+                },
+                child: Column(
+                  children: [
+                    SizedBox(height: size.height * 0.05),
+                    ScaleTransition(
+                      scale: _animation,
+                      child: SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: Image.asset('assets/images/login.png'),
                       ),
-                      SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: Image.asset('assets/images/login.png')),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.11,
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    const Text(
+                      "Login",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: size.height * 0.03),
+
+                    /// Email Field
+                    BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state) {
+                        return NeumorphicTextField(
+                          icon: Icons.email,
+                          hint: "Email",
+                          controller: emailController,
+                          onChanged: (email) => context
+                              .read<LoginBloc>()
+                              .add(EmailChanged(email)),
+                        );
+                      },
+                    ),
+                    SizedBox(height: size.height * 0.02),
+
+                    /// Password Field
+                    BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state) {
+                        return NeumorphicTextField(
+                          icon: Icons.lock,
+                          hint: "Password",
+                          controller: passwordController,
+                          obscureText: true,
+                          onChanged: (password) => context
+                              .read<LoginBloc>()
+                              .add(PasswordChanged(password)),
+                        );
+                      },
+                    ),
+                    SizedBox(height: size.height * 0.04),
+
+                    /// Login Button
+                    BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state) {
+                        return PrimaryButton(
+                          text: "Login",
+                          isLoading: state.isSubmitting,
+                          onPressed: () {
+                            context.read<LoginBloc>().add(LoginSubmitted());
+                          },
+                          context: context,
+                        );
+                      },
+                    ),
+                    SizedBox(height: size.height * 0.02),
+
+                    /// Forgot Password
+                    Text(
+                      "Forgot your password?",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    SizedBox(height: size.height * 0.04),
+
+                    /// Social Buttons
+                    _buildSocialButtons(),
+                    const SizedBox(height: 20),
+
+                    /// Sign Up Redirect
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const FavoriteScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Don't have an account? Sign up",
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.03,
-                      ),
-                      BlocBuilder<LoginBloc, LoginState>(
-                        builder: (context, state) {
-                          return NeumorphicTextField(
-                            icon: Icons.email,
-                            hint: "Email",
-                            controller: emailController,
-                            onChanged: (email) => context
-                                .read<LoginBloc>()
-                                .add(EmailChanged(email)),
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                      BlocBuilder<LoginBloc, LoginState>(
-                        builder: (context, state) {
-                          return NeumorphicTextField(
-                            hint: "Password",
-                            controller: passwordController,
-                            obscureText: true,
-                            onChanged: (password) => context
-                                .read<LoginBloc>()
-                                .add(PasswordChanged(password)),
-                            icon: Icons.lock,
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                      ),
-                      BlocBuilder<LoginBloc, LoginState>(
-                        builder: (context, state) {
-                          return PrimaryButton(
-                            text: "Login",
-                            isLoading: state.isSubmitting,
-                            onPressed: () {
-                              context.read<LoginBloc>().add(LoginSubmitted());
-                            },
-                            context: context,
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                      Text("Forgot your password?",
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      _buildSocialButtons(),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => FavoriteScreen(
-                            )),
-                          );
-                        },
-                        child: Text(
-                          "Don't have an account? Sign up",
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
                 ),
               ),
             ),
@@ -179,25 +186,26 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildSocialButton(Icons.facebook, "Facebook", Colors.blue),
-        SizedBox(width: 20),
-        _buildSocialButton(Icons.apple, "Apple", Colors.blue),
+        const SizedBox(width: 20),
+        _buildSocialButton(Icons.apple, "Apple", Colors.black),
       ],
     );
   }
 
   Widget _buildSocialButton(IconData icon, String label, Color color) {
     return SizedBox(
-      width: 150,
-      height: 80,
+      width: 140,
+      height: 50,
       child: ElevatedButton.icon(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
         ),
         icon: Icon(icon, color: Colors.white),
-        label: Text(label, style: TextStyle(color: Colors.white)),
+        label: Text(label, style: const TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -206,7 +214,7 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    Path path = Path();
+    final path = Path();
     path.lineTo(0, size.height - 60);
     path.quadraticBezierTo(
         size.width / 4, size.height, size.width / 2, size.height - 40);

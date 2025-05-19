@@ -10,6 +10,4 @@ class ImagePickerUtil {
     final XFile? file = await _picker.pickImage(source:ImageSource.gallery);
     return file;
   }
-
-
 }

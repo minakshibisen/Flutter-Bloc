@@ -28,10 +28,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           BlocBuilder<FavoriteListBloc, FavoriteListState>(
             builder: (context, state) {
               return Visibility(
-                visible: state.temporaryFavoriteItemList.isNotEmpty? true:false,
-                child: IconButton(onPressed: () {
-                  context.read<FavoriteListBloc>().add(DeletedItem());
-                }, icon: Icon(Icons.delete)),
+                visible:
+                    state.temporaryFavoriteItemList.isNotEmpty ? true : false,
+                child: IconButton(
+                    onPressed: () {
+                      context.read<FavoriteListBloc>().add(DeletedItem());
+                    },
+                    icon: Icon(Icons.delete)),
               );
             },
           )
@@ -60,40 +63,39 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         final item = state.favoriteItemList[index];
                         return Card(
                             child: ListTile(
-                              leading: Checkbox(
-                                  value:
+                          leading: Checkbox(
+                              value:
                                   state.temporaryFavoriteItemList.contains(item)
                                       ? true
                                       : false,
-                                  onChanged: (value) {
-                                    if (value!) {
-                                      context
-                                          .read<FavoriteListBloc>()
-                                          .add(SelectedItem(item: item));
-                                    } else {
-                                      context
-                                          .read<FavoriteListBloc>()
-                                          .add(UnSelectedItem(item: item));
-                                    }
-                                  }),
-                              title: Text(item.value.toString()),
-                              trailing: IconButton(
-                                  onPressed: () {
-                                    FavoriteModelList favoriteModelList =
+                              onChanged: (value) {
+                                if (value!) {
+                                  context
+                                      .read<FavoriteListBloc>()
+                                      .add(SelectedItem(item: item));
+                                } else {
+                                  context
+                                      .read<FavoriteListBloc>()
+                                      .add(UnSelectedItem(item: item));
+                                }
+                              }),
+                          title: Text(item.value.toString()),
+                          trailing: IconButton(
+                              onPressed: () {
+                                FavoriteModelList favoriteModelList =
                                     FavoriteModelList(
                                         id: item.id,
                                         value: item.value,
                                         isFavorite:
-                                        item.isFavorite ? false : true);
-                                    context
-                                        .read<FavoriteListBloc>()
-                                        .add(
-                                        FavoriteItem(item: favoriteModelList));
-                                  },
-                                  icon: Icon(item.isFavorite
-                                      ? Icons.favorite
-                                      : Icons.favorite_border)),
-                            ));
+                                            item.isFavorite ? false : true);
+                                context
+                                    .read<FavoriteListBloc>()
+                                    .add(FavoriteItem(item: favoriteModelList));
+                              },
+                              icon: Icon(item.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border)),
+                        ));
                       });
               }
             },

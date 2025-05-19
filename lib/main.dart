@@ -1,9 +1,10 @@
 import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
+import 'package:bloc_flutter/bloc/post/post_bloc.dart';
 import 'package:bloc_flutter/repository/favorite_repo.dart';
+import 'package:bloc_flutter/ui/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'bloc/login/login2_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
 
         providers: [
           BlocProvider(create: (_) => LoginBloc()),
-          BlocProvider(create: (_) => FavoriteListBloc(FavoriteRepository()))
+          BlocProvider(create: (_) => FavoriteListBloc(FavoriteRepository())),
+          BlocProvider(create: (_) => PostBloc()),
         ],
         child: MaterialApp(
           title: 'Flutter Demo',
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: AnimatedLoginScreen(),
+          home: LoginScreen(),
         ),
 
     );
