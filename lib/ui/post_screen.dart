@@ -3,7 +3,6 @@ import 'package:bloc_flutter/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
 
@@ -12,6 +11,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+  @override
   void initState() {
     super.initState();
     context.read<PostBloc>().add(PostFetched());
@@ -39,20 +39,44 @@ class _PostScreenState extends State<PostScreen> {
                   decoration: InputDecoration(
                       hintText: 'search with email',
                       border: OutlineInputBorder()),
-                  onChanged: (filterKey) {},
+                  onChanged: (filterKey) {
+                    context.read<PostBloc>().add(SearchItem(filterKey));
+                  },
                 ),
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: state.postList.length,
-                      itemBuilder: (context, index) {
-                        final item = state.postList[index];
-                        return ListTile(
-                          title: Text(
-                            item.email.toString(),
+                  child: state.searchMessage.isNotEmpty
+                      ? Center(
+                          child: Text(
+                            state.searchMessage.toString(),
                           ),
-                          subtitle: Text(item.body.toString()),
-                        );
-                      }),
+                        )
+                      : ListView.builder(
+                          itemCount: state.tempPostList.isEmpty
+                              ? state.postList.length
+                              : state.tempPostList.length,
+                          itemBuilder: (context, index) {
+                            if (state.tempPostList.isNotEmpty) {
+                              final item = state.postList[index];
+                              return Card(
+                                child: ListTile(
+                                  title: Text(
+                                    item.email.toString(),
+                                  ),
+                                  subtitle: Text(item.body.toString()),
+                                ),
+                              );
+                            } else {
+                              final item = state.postList[index];
+                              return Card(
+                                child: ListTile(
+                                  title: Text(
+                                    item.email.toString(),
+                                  ),
+                                  subtitle: Text(item.body.toString()),
+                                ),
+                              );
+                            }
+                          }),
                 ),
               ],
             );
