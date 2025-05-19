@@ -11,5 +11,6 @@ class SearchItem extends PostEvent {
   final String stSearch;
   SearchItem(this.stSearch);
 
+  @override
   List<Object> get props => [stSearch];
 }

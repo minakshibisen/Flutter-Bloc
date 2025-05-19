@@ -26,7 +26,7 @@ class _PostScreenState extends State<PostScreen> {
       body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
         switch (state.postStatus) {
           case PostStatus.loading:
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           case PostStatus.failure:
             return Center(
                 child: Text(
@@ -35,13 +35,16 @@ class _PostScreenState extends State<PostScreen> {
           case PostStatus.success:
             return Column(
               children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                      hintText: 'search with email',
-                      border: OutlineInputBorder()),
-                  onChanged: (filterKey) {
-                    context.read<PostBloc>().add(SearchItem(filterKey));
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        hintText: 'search with email',
+                        border: OutlineInputBorder()),
+                    onChanged: (filterKey) {
+                      context.read<PostBloc>().add(SearchItem(filterKey));
+                    },
+                  ),
                 ),
                 Expanded(
                   child: state.searchMessage.isNotEmpty
@@ -56,7 +59,9 @@ class _PostScreenState extends State<PostScreen> {
                               : state.tempPostList.length,
                           itemBuilder: (context, index) {
                             if (state.tempPostList.isNotEmpty) {
-                              final item = state.postList[index];
+                              final item = state.tempPostList.isNotEmpty
+                                  ? state.tempPostList[index]
+                                  : state.postList[index];
                               return Card(
                                 child: ListTile(
                                   title: Text(

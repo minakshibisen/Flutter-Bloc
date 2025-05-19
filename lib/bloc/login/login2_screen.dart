@@ -98,7 +98,6 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                     ),
                     SizedBox(height: size.height * 0.03),
 
-                    /// Email Field
                     BlocBuilder<LoginBloc, LoginState>(
                       builder: (context, state) {
                         return NeumorphicTextField(
@@ -113,7 +112,6 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                     ),
                     SizedBox(height: size.height * 0.02),
 
-                    /// Password Field
                     BlocBuilder<LoginBloc, LoginState>(
                       builder: (context, state) {
                         return NeumorphicTextField(
@@ -129,7 +127,6 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                     ),
                     SizedBox(height: size.height * 0.04),
 
-                    /// Login Button
                     BlocBuilder<LoginBloc, LoginState>(
                       builder: (context, state) {
                         return PrimaryButton(
@@ -144,7 +141,6 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                     ),
                     SizedBox(height: size.height * 0.02),
 
-                    /// Forgot Password
                     Text(
                       "Forgot your password?",
                       style: Theme.of(context).textTheme.bodyLarge,

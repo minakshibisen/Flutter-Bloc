@@ -94,6 +94,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     //       post.body.toLowerCase().contains(stSearch);
     // }).toList();
     // emit(
-    //     state.copyWith(tempPostList: tempPostList, message: 'Filtered search'));
+    //     state.copyWith(tempPostList: filtered, message: 'Filtered search'));
   }
 }
