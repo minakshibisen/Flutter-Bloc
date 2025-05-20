@@ -1,11 +1,9 @@
-import 'package:bloc_flutter/ui/favorite_screen.dart';
 import 'package:bloc_flutter/ui/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/login/login_bloc.dart';
 import '../bloc/login/login_event.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,12 +15,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  late LoginBloc _loginBloc;
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _loginBloc = LoginBloc();
+    super.initState();
   }
 
   void _onLoginPressed(BuildContext context) {
@@ -32,38 +37,27 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        centerTitle: true,
-      ),
-      body: BlocListener<LoginBloc, LoginState>(
-        listenWhen: (previous, current) =>
-        previous.isSuccess != current.isSuccess ||
-            previous.isFailure != current.isFailure,
-        listener: (context, state) {
-          if (state.isSuccess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const PostScreen()),
-            );
-          }
-        },
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              _buildEmailField(),
-              const SizedBox(height: 12),
-              _buildPasswordField(),
-              const SizedBox(height: 24),
-              _buildLoginButton(),
-              const SizedBox(height: 12),
-              _buildStatusMessage(),
-            ],
-          ),
+        appBar: AppBar(
+          title: const Text('Login'),
+          centerTitle: true,
         ),
-      ),
-    );
+        body: BlocProvider(
+          create: (_) => _loginBloc,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _buildEmailField(),
+                const SizedBox(height: 12),
+                _buildPasswordField(),
+                const SizedBox(height: 24),
+                _buildLoginButton(),
+                const SizedBox(height: 12),
+                //_buildStatusMessage(),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _buildEmailField() {
@@ -75,10 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: InputDecoration(
             labelText: "Email",
             border: const OutlineInputBorder(),
-            errorText:
-            state.email.isEmpty && state.isFailure ? "Email required" : null,
           ),
           keyboardType: TextInputType.emailAddress,
+          onSubmitted: (value) {},
           onChanged: (email) =>
               context.read<LoginBloc>().add(EmailChanged(email)),
         );
@@ -96,10 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: InputDecoration(
             labelText: "Password",
             border: const OutlineInputBorder(),
-            errorText: state.password.isEmpty && state.isFailure
-                ? "Password required"
-                : null,
           ),
+          onSubmitted: (value) {},
           onChanged: (password) =>
               context.read<LoginBloc>().add(PasswordChanged(password)),
         );
@@ -108,38 +99,55 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginButton() {
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) =>
-      previous.isSubmitting != current.isSubmitting,
-      builder: (context, state) {
-        return SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: state.isSubmitting
-                ? null
-                : () => _onLoginPressed(context),
-            child: state.isSubmitting
-                ? const CircularProgressIndicator(
-                color: Colors.white, strokeWidth: 2)
-                : const Text("Login"),
-          ),
-        );
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.loginStatus == LoginStatus.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message.toString())),
+          );
+        }
+
+        if (state.loginStatus == LoginStatus.loading) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Submitting')),
+          );
+        }
+
+        if (state.loginStatus == LoginStatus.success) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const PostScreen()),
+          );
+        }
       },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          return SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                context.read<LoginBloc>().add(LoginApi());
+              },
+              child: Text("Login"),
+            ),
+          );
+        },
+      ),
     );
   }
+
 
   Widget _buildStatusMessage() {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) =>
-      previous.isSuccess != current.isSuccess ||
-          previous.isFailure != current.isFailure,
+        true,
       builder: (context, state) {
-        if (state.isSuccess) {
+        if (state.loginStatus == LoginStatus.success) {
           return const Text(
             "Login Successful!",
             style: TextStyle(color: Colors.green),
           );
-        } else if (state.isFailure) {
+        } else if (state.loginStatus == LoginStatus.error) {
           return const Text(
             "Login Failed!",
             style: TextStyle(color: Colors.red),

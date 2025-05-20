@@ -69,7 +69,7 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
-                  if (state.isSuccess) {
+                  if (state.loginStatus == LoginStatus.success) {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const CounterScreen()),
@@ -131,7 +131,7 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
                       builder: (context, state) {
                         return PrimaryButton(
                           text: "Login",
-                          isLoading: state.isSubmitting,
+                          isLoading: state.loginStatus==LoginStatus.success,
                           onPressed: () {
                             context.read<LoginBloc>().add(LoginSubmitted());
                           },

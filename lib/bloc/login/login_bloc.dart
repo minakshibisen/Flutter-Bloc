@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 import 'login_event.dart';
 
@@ -8,20 +9,59 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginState()) {
+    on<LoginApi>(_loginApi);
+
     on<EmailChanged>((event, emit) {
      emit(state.copyWith(email: event.email));
     });
+
     on<PasswordChanged>((event, emit) {
      emit(state.copyWith(password: event.password));
     });
-    on<LoginSubmitted>((event,emit)async{
-      emit(state.copyWith(isSubmitting: true,isFailure: false,isSuccess: false));
-      await Future.delayed(Duration(seconds: 3));
-      if(state.email==''||state.password==''){
-        emit(state.copyWith(isSubmitting: false,isSuccess: true));
+
+  }
+
+
+  void _loginApi(LoginApi event,Emitter<LoginState>emit)async{
+    emit(
+      state.copyWith(
+        loginStatus: LoginStatus.loading,
+        message: 'Something went wrong try again',
+      ),
+    );
+    Map data ={'email':state.email,'password':state.password,};
+if (kDebugMode) {
+  print(data);
+}
+    try{
+      final response = await http.post(Uri.parse('http://172.17.1.1/hrmsv1/gateway/validateLogin'),body:data);
+      // final response = await http.post(Uri.parse('https://reqres.in/api/login'),body:data);
+
+      if (response.statusCode==200){
+        emit(
+          state.copyWith(
+            loginStatus: LoginStatus.success,
+            message: 'Login SuccessFull',
+          ),
+        );
       }else{
-        emit(state.copyWith(isSubmitting: false,isFailure: true));
+        if (kDebugMode) {
+          print(response.body);
+        }
+        emit(
+          state.copyWith(
+            loginStatus: LoginStatus.error,
+            message: 'Something went wrong try again',
+          ),
+        );
       }
-    });
+    }catch(e){
+      emit(
+        state.copyWith(
+          message: e.toString(),
+        ),
+      );
+    }
   }
 }
+
