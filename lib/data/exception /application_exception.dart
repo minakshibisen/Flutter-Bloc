@@ -8,8 +8,11 @@ class ApplicationException implements Exception {
   String toString() {
     return '$message $prefix';
   }
-
 }
 
 class NoInternetConnection  extends ApplicationException{
+  NoInternetConnection ([String? message]):super(message ,'No Internet Connection');
+}
+class TimeOutException  extends ApplicationException{
+  TimeOutException ([String? message]):super(message ,'Time Out,Try again later');
 }

@@ -1,9 +1,11 @@
-import 'package:bloc_flutter/ui/post_screen.dart';
+import 'package:bloc_flutter/repository/location_service_repo.dart';
+import 'package:bloc_flutter/ui/attendance_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/login/login_bloc.dart';
 import '../bloc/login/login_event.dart';
+import '../bloc/login/login_state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _loginBloc = LoginBloc();
+    _loginBloc = LoginBloc(locationService: LocationService());
     super.initState();
   }
 
@@ -115,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state.loginStatus == LoginStatus.success) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const PostScreen()),
+            MaterialPageRoute(builder: (_) => const AttendanceScreen()),
           );
         }
       },

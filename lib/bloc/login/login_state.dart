@@ -1,4 +1,5 @@
-part of 'login_bloc.dart';
+
+import 'package:equatable/equatable.dart';
 
 enum LoginStatus { initial, loading, success, error }
 

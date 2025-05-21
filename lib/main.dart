@@ -1,7 +1,9 @@
+import 'package:bloc_flutter/bloc/attendance/attendance_bloc.dart';
 import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
 import 'package:bloc_flutter/bloc/post/post_bloc.dart';
 import 'package:bloc_flutter/repository/favorite_repo.dart';
+import 'package:bloc_flutter/repository/location_service_repo.dart';
 import 'package:bloc_flutter/ui/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +20,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
 
         providers: [
-          BlocProvider(create: (_) => LoginBloc()),
+          BlocProvider(create: (_) => LoginBloc(locationService: LocationService())),
           BlocProvider(create: (_) => FavoriteListBloc(FavoriteRepository())),
           BlocProvider(create: (_) => PostBloc()),
+          BlocProvider(create: (_) => AttendanceBloc(locationService: LocationService())),
         ],
         child: MaterialApp(
           title: 'Flutter Demo',

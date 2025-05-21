@@ -1,4 +1,4 @@
-part of 'attendance_bloc.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class AttendanceEvent extends Equatable {
   @override

@@ -1,6 +1,14 @@
-part of 'attendance_bloc.dart';
 
-@immutable
-sealed class AttendanceState {}
+abstract class AttendanceState {}
 
-final class AttendanceInitial extends AttendanceState {}
+class AttendanceInitial extends AttendanceState {}
+
+class AttendanceLoading extends AttendanceState {}
+
+class AttendanceSuccess extends AttendanceState {}
+
+class AttendanceFailure extends AttendanceState {
+  final String error;
+
+  AttendanceFailure(this.error);
+}

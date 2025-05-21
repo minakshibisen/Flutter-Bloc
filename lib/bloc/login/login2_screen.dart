@@ -6,6 +6,7 @@ import '../../common/primary_button.dart';
 import '../../ui/favorite_screen.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
+import 'login_state.dart';
 
 class AnimatedLoginScreen extends StatefulWidget {
   const AnimatedLoginScreen({super.key});
@@ -69,7 +70,7 @@ class AnimatedLoginScreenState extends State<AnimatedLoginScreen>
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
-                  if (state.loginStatus == LoginStatus.success) {
+                  if (state?.loginStatus == LoginStatus.success) {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const CounterScreen()),

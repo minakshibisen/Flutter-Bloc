@@ -1,25 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
+import '../../repository/location_service_repo.dart';
 import 'login_event.dart';
-
-part 'login_state.dart';
+import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginState()) {
+  final LocationService locationService;
+
+  LoginBloc({required this.locationService}) : super(LoginState()) {
     on<LoginApi>(_loginApi);
-
     on<EmailChanged>((event, emit) {
-     emit(state.copyWith(email: event.email));
+      emit(state.copyWith(email: event.email));
     });
-
     on<PasswordChanged>((event, emit) {
-     emit(state.copyWith(password: event.password));
+      emit(state.copyWith(password: event.password));
     });
-
   }
+
   void _loginApi(LoginApi event, Emitter<LoginState> emit) async {
     if (state.email.isEmpty || state.password.isEmpty) {
       emit(state.copyWith(
@@ -29,17 +29,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return;
     }
 
-    emit(state.copyWith(
-      loginStatus: LoginStatus.loading,
-      message: '',
-    ));
+    emit(state.copyWith(loginStatus: LoginStatus.loading, message: ''));
 
     try {
+      final position = await locationService.getCurrentPosition();
+
       final response = await http.post(
         Uri.parse('http://172.17.1.1/hrmsv1/gateway/validateLogin'),
         body: {
           'email': state.email,
           'password': state.password,
+          'lat': position.latitude.toString(),
+          'lang': position.longitude.toString(),
         },
       );
 
@@ -61,48 +62,4 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ));
     }
   }
-
-
- /* void _loginApi(LoginApi event,Emitter<LoginState>emit)async{
-    emit(
-      state.copyWith(
-        loginStatus: LoginStatus.loading,
-        message: 'Something went wrong try again',
-      ),
-    );
-    Map data ={'email':state.email,'password':state.password,};
-if (kDebugMode) {
-  print(data);
 }
-    try{
-      final response = await http.post(Uri.parse('http://172.17.1.1/hrmsv1/gateway/validateLogin'),body:data);
-      // final response = await http.post(Uri.parse('https://reqres.in/api/login'),body:data);
-
-      if (response.statusCode==200){
-        emit(
-          state.copyWith(
-            loginStatus: LoginStatus.success,
-            message: 'Login SuccessFull',
-          ),
-        );
-      }else{
-        if (kDebugMode) {
-          print(response.body);
-        }
-        emit(
-          state.copyWith(
-            loginStatus: LoginStatus.error,
-            message: 'Something went wrong try again',
-          ),
-        );
-      }
-    }catch(e){
-      emit(
-        state.copyWith(
-          message: e.toString(),
-        ),
-      );
-    }
-  }*/
-}
-
