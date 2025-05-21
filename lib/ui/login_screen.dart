@@ -97,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-
   Widget _buildLoginButton() {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
@@ -126,9 +125,18 @@ class _LoginScreenState extends State<LoginScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
+                if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please enter both email and password."),
+                    ),
+                  );
+                  return;
+                }
+
                 context.read<LoginBloc>().add(LoginApi());
               },
-              child: Text("Login"),
+              child: const Text("Login"),
             ),
           );
         },

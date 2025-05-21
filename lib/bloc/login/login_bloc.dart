@@ -20,9 +20,50 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
   }
+  void _loginApi(LoginApi event, Emitter<LoginState> emit) async {
+    if (state.email.isEmpty || state.password.isEmpty) {
+      emit(state.copyWith(
+        loginStatus: LoginStatus.error,
+        message: 'Email and password must not be empty',
+      ));
+      return;
+    }
+
+    emit(state.copyWith(
+      loginStatus: LoginStatus.loading,
+      message: '',
+    ));
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://172.17.1.1/hrmsv1/gateway/validateLogin'),
+        body: {
+          'email': state.email,
+          'password': state.password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        emit(state.copyWith(
+          loginStatus: LoginStatus.success,
+          message: 'Login Successful',
+        ));
+      } else {
+        emit(state.copyWith(
+          loginStatus: LoginStatus.error,
+          message: 'Invalid credentials',
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        loginStatus: LoginStatus.error,
+        message: e.toString(),
+      ));
+    }
+  }
 
 
-  void _loginApi(LoginApi event,Emitter<LoginState>emit)async{
+ /* void _loginApi(LoginApi event,Emitter<LoginState>emit)async{
     emit(
       state.copyWith(
         loginStatus: LoginStatus.loading,
@@ -62,6 +103,6 @@ if (kDebugMode) {
         ),
       );
     }
-  }
+  }*/
 }
 
