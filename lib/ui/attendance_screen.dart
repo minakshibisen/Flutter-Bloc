@@ -57,7 +57,7 @@ class AttendanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.1),
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
