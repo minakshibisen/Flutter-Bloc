@@ -4,7 +4,7 @@ import 'package:bloc_flutter/bloc/login/login_bloc.dart';
 import 'package:bloc_flutter/bloc/post/post_bloc.dart';
 import 'package:bloc_flutter/repository/favorite_repo.dart';
 import 'package:bloc_flutter/repository/location_service_repo.dart';
-import 'package:bloc_flutter/ui/login_screen.dart';
+import 'package:bloc_flutter/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: LoginScreen(),
+          home: SplashScreen(),
         ),
 
     );
