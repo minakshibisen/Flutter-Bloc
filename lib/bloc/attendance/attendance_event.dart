@@ -5,4 +5,5 @@ abstract class AttendanceEvent extends Equatable {
   List<Object> get props => [];
 }
 class AddAttendance extends AttendanceEvent {}
+class FetchAttendance extends AttendanceEvent {}
 
