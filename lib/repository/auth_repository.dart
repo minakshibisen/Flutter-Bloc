@@ -5,6 +5,7 @@ class AuthRepository {
 
   Future<void> login(String email, String password) async {
     await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    print(login);
   }
 
   Future<void> signUp(String email, String password) async {
