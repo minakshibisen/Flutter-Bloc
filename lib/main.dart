@@ -1,15 +1,20 @@
 import 'package:bloc_flutter/bloc/attendance/attendance_bloc.dart';
+import 'package:bloc_flutter/bloc/auth/auth_bloc.dart';
 import 'package:bloc_flutter/bloc/favoritelist/favorite_list_bloc.dart';
 import 'package:bloc_flutter/bloc/login/login_bloc.dart';
 import 'package:bloc_flutter/bloc/post/post_bloc.dart';
+import 'package:bloc_flutter/repository/auth_repository.dart';
 import 'package:bloc_flutter/repository/favorite_repo.dart';
 import 'package:bloc_flutter/repository/location_service_repo.dart';
 import 'package:bloc_flutter/ui/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // 👈 initialize Firebase here
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,6 +28,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => LoginBloc(locationService: LocationService())),
           BlocProvider(create: (_) => FavoriteListBloc(FavoriteRepository())),
           BlocProvider(create: (_) => PostBloc()),
+          BlocProvider(create: (_) => AuthBloc(AuthRepository())),
           BlocProvider(create: (_) => AttendanceBloc(locationService: LocationService())),
         ],
         child: MaterialApp(

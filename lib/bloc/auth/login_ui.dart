@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'auth_bloc.dart';
+import 'auth_event.dart';
+import 'auth_state.dart';
+
+class LoginUiScreen extends StatelessWidget {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  LoginUiScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Login")),
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoading) {
+            // Show loading dialog
+            showDialog(
+              context: context,
+              builder: (_) => Center(child: CircularProgressIndicator()),
+              barrierDismissible: false,
+            );
+          } else if (state is AuthAuthenticated) {
+            Navigator.of(context).pop(); // remove loading
+            Navigator.of(context).pushReplacementNamed('/dashboard');
+          } else if (state is AuthError) {
+            Navigator.of(context).pop(); // remove loading
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              TextField(controller: emailController,
+                  decoration: InputDecoration(labelText: "Email")),
+              TextField(controller: passwordController,
+                  decoration: InputDecoration(labelText: "Password"),
+                  obscureText: true),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  final email = emailController.text;
+                  final password = passwordController.text;
+                  if (email.isEmpty || password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Fill all fields")),
+                    );
+                    return;
+                  }
+                  context.read<AuthBloc>().add(LoginRequested(email, password));
+                },
+                child: Text("Login"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(context, '/signup'),
+                child: Text("Don't have an account? Sign Up"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

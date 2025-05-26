@@ -53,6 +53,9 @@ dependencies:
   device_info_plus: ^10.1.2
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
+  firebase_auth: ^4.15.0
+  firebase_core: ^2.30.0
+  local_auth: ^2.1.7
 
 dev_dependencies:
   flutter_test:
