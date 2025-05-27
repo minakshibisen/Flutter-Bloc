@@ -1,4 +1,7 @@
+
+import 'package:bloc_flutter/common/default_app_bar.dart';
 import 'package:bloc_flutter/ui/post_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_bloc.dart';
@@ -14,7 +17,7 @@ class LoginUiScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: DefaultAppBar(title: 'Login',),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthLoading) {
@@ -24,9 +27,11 @@ class LoginUiScreen extends StatelessWidget {
               barrierDismissible: false,
             );
           } else if (state is AuthAuthenticated) {
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => PostScreen()));
+            Navigator.of(context).pop(); // to close dialog
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => PostScreen()),
+            );
           } else if (state is AuthError) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -57,7 +62,9 @@ class LoginUiScreen extends StatelessWidget {
                     return;
                   }
                   context.read<AuthBloc>().add(LoginRequested(email, password));
-                  print(LoginRequested(email, password));
+                  if (kDebugMode) {
+                    print(LoginRequested(email, password));
+                  }
                 },
                 child: Text("Login"),
               ),

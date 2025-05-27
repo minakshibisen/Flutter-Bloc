@@ -1,3 +1,4 @@
+ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../repository/auth_repository.dart';
 import 'auth_event.dart';
@@ -12,12 +13,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogoutRequested>(_onLogout);
   }
 
+
   Future<void> _onLogin(LoginRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
       await authRepo.login(event.email, event.password);
       emit(AuthAuthenticated());
-      print(emit);
+      if (kDebugMode) {
+        print('Login success, emitting AuthAuthenticated');
+      }
     } catch (e) {
       emit(AuthError(e.toString()));
     }
