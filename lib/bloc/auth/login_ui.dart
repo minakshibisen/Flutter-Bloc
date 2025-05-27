@@ -27,7 +27,7 @@ class LoginUiScreen extends StatelessWidget {
               barrierDismissible: false,
             );
           } else if (state is AuthAuthenticated) {
-            Navigator.of(context).pop(); // to close dialog
+            Navigator.of(context).pop();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => PostScreen()),

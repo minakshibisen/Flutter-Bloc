@@ -23,30 +23,24 @@ class _SplashScreenState extends State<SplashScreen> {
       appBar: DefaultAppBar(title: 'Splash Screen',),
       body: SafeArea(
           child: Center(
-        child:Card(
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-            ),
-            child: Column(
-              children: [
-                Text(
-                  'Splash Screen',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Welcome to the app',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            child: Card(
+              child: Column(
+                children: [
+                  Text(
+                    'Splash Screen',
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                ),
-              ],
+                  SizedBox(height: 8),
+                  Text(
+                    'Welcome to the app',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-      )),
+          )),
     );
   }
 }
