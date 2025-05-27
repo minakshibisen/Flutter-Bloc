@@ -6,6 +6,7 @@ import 'package:bloc_flutter/bloc/post/post_bloc.dart';
 import 'package:bloc_flutter/repository/auth_repository.dart';
 import 'package:bloc_flutter/repository/favorite_repo.dart';
 import 'package:bloc_flutter/repository/location_service_repo.dart';
+import 'package:bloc_flutter/theme/theme.dart';
 import 'package:bloc_flutter/ui/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +34,9 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Flutter Demo',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.system,
           home: SplashScreen(),
         ),
 
